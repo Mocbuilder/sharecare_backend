@@ -1,9 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
+using sharecare_backend.Models.Problem;
+using System.IO;
+using System.Reflection;
 
 namespace sharecare_backend.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class DevController : ControllerBase
     {
         private readonly ILogger<DevController> _logger;
@@ -14,10 +18,25 @@ namespace sharecare_backend.Controllers
         }
 
         [HttpPost]
-        public IActionResult POSTMapData([FromBody] object jsonData)
+        public IActionResult POSTProblem([FromBody] object jsonData)
         {
+            try
+            {
+                ProblemEntity newProblem = JsonSerializer.Deserialize<ProblemEntity>(jsonData.ToString());
+                return Content("Great Success!");
+            }
+            catch(Exception ec)
+            {
+                Console.WriteLine(ec);
+                return Content("Error: " + ec.Message);
+            }
+        }
 
-            return Content("File saved successfully");
+        [HttpGet("{id}")]
+        public IActionResult GETProblemFromId()
+        {
+            ProblemEntity problem = 
+            return Ok(obj);
         }
     }
 }

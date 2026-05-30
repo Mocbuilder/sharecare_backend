@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.OpenApi;
+using Npgsql;
 
 namespace sharecare_backend
 {
@@ -8,17 +10,19 @@ namespace sharecare_backend
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            var connectionString = builder.Configuration.GetConnectionString("PostgreSQL");
+            builder.Services.AddNpgsqlDataSource(connectionString);
 
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-            builder.Services.AddOpenApi();
+            //builder.Services.AddOpenApi();
 
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.MapOpenApi();
+                //app.MapOpenApi();
             }
 
             app.UseHttpsRedirection();
