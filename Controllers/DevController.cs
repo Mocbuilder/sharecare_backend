@@ -4,19 +4,22 @@ using sharecare_backend.Models.Problem;
 using System.IO;
 using System.Reflection;
 using System.Text.Json;
+using sharecare_backend.Services;
 
 namespace sharecare_backend.Controllers
 {
     [ApiController]
     [Authorize(AuthenticationSchemes = "BasicAuthentication")]
-    [Route("api/[controller]")]
+    [Route("api/dev/[controller]")]
     public class DevController : ControllerBase
     {
         private readonly ILogger<DevController> _logger;
+        private readonly DbService _dbService;
 
-        public DevController(ILogger<DevController> logger)
+        public DevController(ILogger<DevController> logger, DbService db)
         {
             _logger = logger;
+            _dbService = db;
         }
 
         [HttpPost]
@@ -35,10 +38,16 @@ namespace sharecare_backend.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GETProblemFromId()
+        public IActionResult GETProblemFromId(int id)
         {
-            //ProblemEntity problem = 
-            return Ok(/*obj*/);
+            ProblemDBEntity dbproblem = _dbService.GetProbelemByIdAsync(id).Result;
+            if (dbproblem == null)
+            {
+                return NotFound(new { message = $"ProblemEntity with ID {id} not found." });
+            }
+            ProblemEntity problem = dbproblem.ToNormalProblem();
+
+            return Ok(problem);
         }
     }
 }

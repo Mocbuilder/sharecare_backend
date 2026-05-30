@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication;
 using Npgsql;
 using sharecare_backend.Filters;
+using sharecare_backend.Services;
 
 namespace sharecare_backend
 {
@@ -13,6 +14,8 @@ namespace sharecare_backend
             // Add services to the container.
             var connectionString = builder.Configuration.GetConnectionString("PostgreSQL");
             builder.Services.AddNpgsqlDataSource(connectionString);
+
+            builder.Services.AddScoped<DbService>();
 
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
