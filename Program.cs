@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.OpenApi;
 using Npgsql;
+using sharecare_backend.Filters;
 
 namespace sharecare_backend
 {
@@ -17,6 +19,9 @@ namespace sharecare_backend
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             //builder.Services.AddOpenApi();
 
+            builder.Services.AddAuthentication("BasicAuthentication")
+                .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
+    
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -27,6 +32,7 @@ namespace sharecare_backend
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
 

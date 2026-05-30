@@ -1,12 +1,14 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
 using sharecare_backend.Models.Problem;
 using System.IO;
 using System.Reflection;
+using System.Text.Json;
 
 namespace sharecare_backend.Controllers
 {
     [ApiController]
+    [Authorize(AuthenticationSchemes = "BasicAuthentication")]
     [Route("api/[controller]")]
     public class DevController : ControllerBase
     {
