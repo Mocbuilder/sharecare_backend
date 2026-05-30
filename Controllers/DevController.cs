@@ -37,8 +37,8 @@ namespace sharecare_backend.Controllers
         [HttpGet("{id}")]
         public IActionResult GETProblemFromId()
         {
-            ProblemEntity problem = 
-            return Ok(obj);
+            //ProblemEntity problem = 
+            return Ok(/*obj*/);
         }
     }
 }

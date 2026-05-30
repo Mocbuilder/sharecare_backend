@@ -4,9 +4,9 @@ namespace sharecare_backend.Services
 {
     public class ApiHandlerService
     {
-        public static ProblemEntity GetProblemFromID(int Id)
+        /*public static ProblemEntity GetProblemFromID(int Id)
         {
             return
-        }
+        }*/
     }
 }

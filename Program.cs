@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.OpenApi;
 using Npgsql;
 using sharecare_backend.Filters;
 
