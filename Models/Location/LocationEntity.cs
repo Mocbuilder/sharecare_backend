@@ -1,4 +1,4 @@
-﻿namespace sharecare_backend.Models
+﻿namespace sharecare_backend.Models.Location
 {
     public class LocationEntity
     {

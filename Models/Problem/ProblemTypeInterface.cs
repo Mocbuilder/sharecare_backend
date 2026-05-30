@@ -1,4 +1,7 @@
-﻿namespace sharecare_backend.Models
+﻿using sharecare_backend.Models.Location;
+using sharecare_backend.Models.Time;
+
+namespace sharecare_backend.Models.Problem
 {
     public interface ProblemTypeInterface
     {
