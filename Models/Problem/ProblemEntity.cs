@@ -1,9 +1,10 @@
 ﻿using sharecare_backend.Models.Location;
+using sharecare_backend.Models.Payment;
 using sharecare_backend.Models.Time;
 
 namespace sharecare_backend.Models.Problem
 {
-    public class ProblemEntity : ProblemTypeInterface
+    public class ProblemEntity
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -12,6 +13,6 @@ namespace sharecare_backend.Models.Problem
         public TimeTypeInterface Time { get; set; }
         public bool IsLocationBound { get; set; }
         public LocationEntity Location { get; set; }
-        //Gebühr/Gegenwert
+        public PaymentTypeInterface Payment { get; set; }
     }
 }

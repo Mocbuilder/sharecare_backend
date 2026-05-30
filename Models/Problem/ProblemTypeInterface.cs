@@ -1,5 +1,6 @@
 ﻿using sharecare_backend.Models.Location;
 using sharecare_backend.Models.Time;
+using System.Text.Json.Serialization;
 
 namespace sharecare_backend.Models.Problem
 {
