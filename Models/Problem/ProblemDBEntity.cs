@@ -21,7 +21,25 @@ namespace sharecare_backend.Models.Problem
         public ProblemEntity ToNormalProblem()
         {
             //convert logic
-            return null;
+            ProblemTypeEnum type = System.Text.Json.JsonSerializer.Deserialize<ProblemTypeEnum>(TypeJson);
+            TimeTypeInterface time = System.Text.Json.JsonSerializer.Deserialize<TimeTypeInterface>(TimeJson);
+            PaymentTypeInterface payment = System.Text.Json.JsonSerializer.Deserialize<PaymentTypeInterface>(PaymentJson);
+
+            ProblemEntity problem = new ProblemEntity
+            {
+                Id = Id,
+                Name = Name,
+                Description = Description,
+                Type = type,
+                Time = time,
+                IsLocationBound = IsLocationBound,
+                Location = Location,
+                Payment = payment,
+                ProvidersId = ProvidersId,
+                SearchersId = SearchersId
+            };
+
+            return problem;
         }
     }
 }
