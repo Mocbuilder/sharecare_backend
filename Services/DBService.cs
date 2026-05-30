@@ -27,7 +27,7 @@ namespace sharecare_backend.Services
             return await connection.QueryFirstOrDefaultAsync<ProblemDBEntity>(sql, new { Id = id });
         }
 
-        public async Task<int> CreateProblemAsync(ProblemEntity problem)
+        public async Task<int> CreateProblemAsync(ProblemDBEntity problem)
         {
             using var connection = await _dataSource.OpenConnectionAsync();
             const string sql = """

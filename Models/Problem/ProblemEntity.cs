@@ -17,5 +17,22 @@ namespace sharecare_backend.Models.Problem
         public PaymentTypeInterface Payment { get; set; }
         public List<int> ProvidersId { get; set; }
         public List<int> SearchersId { get; set; }
+
+        public ProblemDBEntity ToDBProblem()
+        {
+            return new ProblemDBEntity
+            {
+                Id = Id,
+                Name = Name,
+                Description = Description,
+                TypeJson = System.Text.Json.JsonSerializer.Serialize(Type),
+                TimeJson = System.Text.Json.JsonSerializer.Serialize(Time),
+                IsLocationBound = IsLocationBound,
+                Location = Location,
+                PaymentJson = System.Text.Json.JsonSerializer.Serialize(Payment),
+                ProvidersId = ProvidersId,
+                SearchersId = SearchersId
+            };
+        }
     }
 }
