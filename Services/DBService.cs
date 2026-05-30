@@ -13,11 +13,11 @@ namespace sharecare_backend.Services
             _dataSource = dataSource;
         }
 
-        public async Task<IEnumerable<ProblemEntity>> GetProductsAsync()
+        public async Task<IEnumerable<ProblemDBEntity>> GetProblemsAsync()
         {
             using var connection = await _dataSource.OpenConnectionAsync();
-            const string sql = "SELECT id, name, price, created_at AS CreatedAt FROM products";
-            return await connection.QueryAsync<Product>(sql);
+            const string sql = "SELECT id AS Id, name as Name, description AS Description, type_json AS TypeJson, time_json AS TimeJson, is_location_bound AS IsLocationBound, location, payment_json AS PaymentJson, providers_id AS ProvidersId, searchers_id AS SearchersId FROM products";
+            return await connection.QueryAsync<ProblemDBEntity>(sql);
         }
 
         public async Task<ProblemDBEntity?> GetProbelemByIdAsync(int id)
@@ -27,16 +27,15 @@ namespace sharecare_backend.Services
             return await connection.QueryFirstOrDefaultAsync<ProblemDBEntity>(sql, new { Id = id });
         }
 
-        // Example 3: Executing a command (Insert/Update/Delete)
-        public async Task<int> CreateProductAsync(Product product)
+        public async Task<int> CreateProblemAsync(ProblemEntity problem)
         {
             using var connection = await _dataSource.OpenConnectionAsync();
             const string sql = """
-            INSERT INTO products (name, price) 
-            VALUES (@Name, @Price) 
+            INSERT INTO problems (name, description, type_json, time_json, is_location_bound, location, payment_json, providers_id, searchers_id) 
+            VALUES (@Name, @Description, @TypeJson, @TimeJson, @IsLocationBound, @Location, @PaymentJson, @ProvidersId, @SearchersId) 
             RETURNING id;
             """;
-            return await connection.ExecuteScalarAsync<int>(sql, product);
+            return await connection.ExecuteScalarAsync<int>(sql, problem);
         }
     }
 }

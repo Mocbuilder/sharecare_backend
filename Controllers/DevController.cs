@@ -23,11 +23,12 @@ namespace sharecare_backend.Controllers
         }
 
         [HttpPost]
-        public IActionResult POSTProblem([FromBody] object jsonData)
+        public IActionResult POSTCreateProblem([FromBody] object jsonData)
         {
             try
             {
                 ProblemEntity newProblem = JsonSerializer.Deserialize<ProblemEntity>(jsonData.ToString());
+                _dbService.CreateProblemAsync(newProblem).Wait();
                 return Content("Great Success!");
             }
             catch(Exception ec)
