@@ -11,15 +11,35 @@ namespace sharecare_backend.Controllers
     [ApiController]
     [Authorize(AuthenticationSchemes = "BasicAuthentication")]
     [Route("api/[controller]/[action]")]
-    public class DevController : ControllerBase
+    public class ProblemController : ControllerBase
     {
-        private readonly ILogger<DevController> _logger;
+        private readonly ILogger<ProblemController> _logger;
         private readonly DbService _dbService;
 
-        public DevController(ILogger<DevController> logger, DbService db)
+        public ProblemController(ILogger<ProblemController> logger, DbService db)
         {
             _logger = logger;
             _dbService = db;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GETAllProblems()
+        {
+            try
+            {
+                IEnumerable<ProblemDBEntity> dbProblems = await _dbService.GetProblemsAsync();
+
+                List<ProblemEntity> problems = dbProblems
+                    .Select(dbproblem => dbproblem.ToNormalProblem())
+                    .ToList();
+
+                return Ok(problems);
+            }
+            catch (Exception ec)
+            {
+                Console.WriteLine(ec);
+                return Content("Error retrieving data: " + ec.Message);
+            }
         }
 
         [HttpPost]

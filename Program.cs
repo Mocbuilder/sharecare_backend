@@ -26,6 +26,12 @@ namespace sharecare_backend
     
             var app = builder.Build();
 
+            using (var scope = app.Services.CreateScope())
+            {
+                var dbService = scope.ServiceProvider.GetRequiredService<DbService>();
+                dbService.CheckAndCreateTablesAsync().GetAwaiter().GetResult();
+            }
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {

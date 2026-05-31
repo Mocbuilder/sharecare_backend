@@ -1,7 +1,6 @@
 ﻿using sharecare_backend.Models.Location;
 using sharecare_backend.Models.Payment;
 using sharecare_backend.Models.Time;
-using sharecare_backend.Models.User;
 
 namespace sharecare_backend.Models.Problem
 {
@@ -28,10 +27,10 @@ namespace sharecare_backend.Models.Problem
                 TypeJson = System.Text.Json.JsonSerializer.Serialize(Type),
                 TimeJson = System.Text.Json.JsonSerializer.Serialize(Time),
                 IsLocationBound = IsLocationBound,
-                Location = Location,
+                LocationJson = System.Text.Json.JsonSerializer.Serialize(Location),
                 PaymentJson = System.Text.Json.JsonSerializer.Serialize(Payment),
-                ProvidersId = ProvidersId,
-                SearchersId = SearchersId
+                ProvidersId = ProvidersId?.ToArray(),
+                SearchersId = SearchersId?.ToArray()
             };
         }
     }
