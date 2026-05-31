@@ -20,7 +20,7 @@ namespace sharecare_backend.Services
 
             const string sql = """
             CREATE TABLE IF NOT EXISTS problems (
-                id SERIAL PRIMARY KEY AUTOINCREMENT, 
+                id SERIAL PRIMARY KEY, 
                 name TEXT NOT NULL, 
                 description TEXT, 
                 type_json JSONB, 
@@ -32,7 +32,7 @@ namespace sharecare_backend.Services
                 searchers_id INT[]
             );
             CREATE TABLE IF NOT EXISTS users (
-                id SERIAL PRIMARY KEY AUTOINCREMENT, 
+                id SERIAL PRIMARY KEY, 
                 name TEXT NOT NULL, 
                 email TEXT NOT NULL UNIQUE, 
                 password_hash TEXT NOT NULL
