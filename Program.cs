@@ -12,7 +12,7 @@ namespace sharecare_backend
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            var connectionString = builder.Configuration.GetConnectionString("PostgreSQL");
+            var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
             builder.Services.AddNpgsqlDataSource(connectionString);
 
             builder.Services.AddScoped<DbService>();
