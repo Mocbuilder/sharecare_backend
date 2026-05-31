@@ -20,7 +20,7 @@ namespace sharecare_backend.Services
 
             const string sql = """
             CREATE TABLE IF NOT EXISTS problems (
-                id SERIAL PRIMARY KEY, 
+                id SERIAL PRIMARY KEY AUTOINCREMENT, 
                 name TEXT NOT NULL, 
                 description TEXT, 
                 type_json JSONB, 
@@ -31,12 +31,18 @@ namespace sharecare_backend.Services
                 providers_id INT[], 
                 searchers_id INT[]
             );
+            CREATE TABLE IF NOT EXISTS users (
+                id SERIAL PRIMARY KEY AUTOINCREMENT, 
+                name TEXT NOT NULL, 
+                email TEXT NOT NULL UNIQUE, 
+                password_hash TEXT NOT NULL
+            );
             """;
 
             await connection.ExecuteAsync(sql);
         }
 
-        public async Task<IEnumerable<ProblemDBEntity>> GetProblemsAsync()
+        public async Task<IEnumerable<ProblemDBEntity>> GetAllProblemsAsync()
         {
             using var connection = await _dataSource.OpenConnectionAsync();
 
@@ -58,7 +64,24 @@ namespace sharecare_backend.Services
             return await connection.QueryAsync<ProblemDBEntity>(sql);
         }
 
-        public async Task<ProblemDBEntity?> GetProbelemByIdAsync(int id)
+        public async Task<IEnumerable<UserEntity>> GetAllUsersAsync()
+        {
+            using var connection = await _dataSource.OpenConnectionAsync();
+
+            const string sql = """
+            SELECT 
+                id AS Id, 
+                name AS Name, 
+                email AS Email,
+                password_hash AS PasswordHash
+            FROM users
+            """;
+
+            return await connection.QueryAsync<UserEntity>(sql);
+        }
+
+        /*
+        public async Task<ProblemDBEntity?> GetProblemByIdAsync(int id)
         {
             using var connection = await _dataSource.OpenConnectionAsync();
 
@@ -79,6 +102,7 @@ namespace sharecare_backend.Services
 
             return await connection.QueryFirstOrDefaultAsync<ProblemDBEntity>(sql, new { Id = id });
         }
+        */
 
         public async Task<int> CreateProblemAsync(ProblemDBEntity problem)
         {
@@ -100,6 +124,22 @@ namespace sharecare_backend.Services
             RETURNING id;
             """;
             return await connection.ExecuteScalarAsync<int>(sql, user);
+        }
+
+        public async Task<UserEntity?> GetUserByEmailAsync(string email)
+        {
+            using var connection = await _dataSource.OpenConnectionAsync();
+
+            const string sql = """
+            SELECT 
+                id AS Id, 
+                name AS Name, 
+                email AS Email,
+                password_hash AS PasswordHash
+            FROM users WHERE email = @email
+            """;
+
+            return await connection.QueryFirstOrDefaultAsync<UserEntity>(sql, new { email });
         }
     }
 }

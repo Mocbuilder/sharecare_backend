@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using sharecare_backend.Models.Problem;
+using sharecare_backend.Models.User;
 using System.IO;
 using System.Reflection;
 using System.Text.Json;
@@ -11,29 +11,24 @@ namespace sharecare_backend.Controllers
     [ApiController]
     [Authorize(AuthenticationSchemes = "BasicAuthentication")]
     [Route("api/[controller]/[action]")]
-    public class ProblemController : ControllerBase
+    public class UserController : ControllerBase
     {
-        private readonly ILogger<ProblemController> _logger;
+        private readonly ILogger<UserController> _logger;
         private readonly DbService _dbService;
 
-        public ProblemController(ILogger<ProblemController> logger, DbService db)
+        public UserController(ILogger<UserController> logger, DbService db)
         {
             _logger = logger;
             _dbService = db;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GETAllProblems()
+        public async Task<IActionResult> GETAllUsers()
         {
             try
             {
-                IEnumerable<ProblemDBEntity> dbProblems = await _dbService.GetAllProblemsAsync();
-
-                List<ProblemEntity> problems = dbProblems
-                    .Select(dbproblem => dbproblem.ToNormalProblem())
-                    .ToList();
-
-                return Ok(problems);
+                IEnumerable<UserEntity> users = await _dbService.GetAllUsersAsync();
+                return Ok(users);
             }
             catch (Exception ec)
             {
@@ -43,13 +38,11 @@ namespace sharecare_backend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> POSTCreateProblem([FromBody] ProblemEntity problem)
+        public async Task<IActionResult> POSTCreateUser([FromBody] UserEntity user)
         {
             try
             {
-                ProblemDBEntity newProblem = problem.ToDBProblem();
-                await _dbService.CreateProblemAsync(newProblem);
-
+                await _dbService.CreateUserAsync(user);
                 return Content("Great Success!");
             }
             catch (Exception ec)
@@ -58,18 +51,18 @@ namespace sharecare_backend.Controllers
                 return Content("Error: " + ec.Message);
             }
         }
+
         /*
         [HttpGet("{id}")]
-        public async Task<IActionResult> GETProblemFromId(int id)
+        public async Task<IActionResult> GETUserFromId(int id)
         {
-            ProblemDBEntity dbproblem = await _dbService.GetProbelemByIdAsync(id);
-            if (dbproblem == null)
+            UserEntity user = await _dbService.GetUserByIdAsync(id);
+            if (user == null)
             {
                 return NotFound(new { message = $"ProblemEntity with ID {id} not found." });
             }
-            ProblemEntity problem = dbproblem.ToNormalProblem();
 
-            return Ok(problem);
+            return Ok(user);
         }
         */
     }

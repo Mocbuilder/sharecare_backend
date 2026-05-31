@@ -1,19 +1,23 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
+using sharecare_backend.Services;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
+using sharecare_backend.Models.User;
 
 namespace sharecare_backend.Filters
 {
     public class BasicAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {
-        public BasicAuthenticationHandler(
+        private readonly DbService _dbService;
+        public BasicAuthenticationHandler(DbService db,
                 IOptionsMonitor<AuthenticationSchemeOptions> options,
                 ILoggerFactory logger,
                 UrlEncoder encoder) : base(options, logger, encoder)
         {
+            _dbService = db;
         }
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
@@ -37,7 +41,7 @@ namespace sharecare_backend.Filters
                 var username = credentials[0];
                 var password = credentials[1];
 
-                if (IsAuthenticated(username, password))
+                if (await IsAuthenticated(username, password))
                 {
                     // If valid, create the user identity/claims principal
                     var claims = new[] {
@@ -60,10 +64,13 @@ namespace sharecare_backend.Filters
             }
         }
 
-        public bool IsAuthenticated(string username, string password)
+        public async Task<bool> IsAuthenticated(string username, string password)
         {
-            //do auth logic with dbservice and stuff
-            return true;
+            UserEntity user = await _dbService.GetUserByEmailAsync(username);
+            if(user.PasswordHash == password)
+                return true;
+            else
+                return false;
         }
     }
 }
